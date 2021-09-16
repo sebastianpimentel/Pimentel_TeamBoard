@@ -14,7 +14,7 @@ import {
 })
 export class LoginComponent implements OnInit {
   loginData: any;
-  messsaje: string;
+  message: string = '';
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   durationInSeconds: number = 2;
@@ -24,43 +24,49 @@ export class LoginComponent implements OnInit {
     private _router: Router,
     private _snackBar: MatSnackBar
   ) {
-    this.messsaje = '';
     this.loginData = {};
   }
 
   ngOnInit(): void {}
+
   login() {
-    if (
-      !this.loginData.email ||
-      !this.loginData.password
-    ) {
-      console.log('failed process : Incomlete data');
-      this.messsaje = 'failed process : Incomlete data';
-      this.opneSnackBarError();
+    if (!this.loginData.email || !this.loginData.password) {
+      this.message = 'Failed process: Imcomplete data';
+      this.openSnackBarError();
       this.loginData = {};
     } else {
       this._userService.login(this.loginData).subscribe(
         (res) => {
-          console.log(res);
           localStorage.setItem('token', res.jwtToken);
           this._router.navigate(['/listTask']);
-          this.loginData={}
+          this.getRole(this.loginData.email);
+          this.loginData = {};
         },
         (err) => {
-          console.log(err);
-          this.messsaje = err.error;
-          this.opneSnackBarError();
+          this.message = err.error;
+          this.openSnackBarError();
         }
       );
     }
   }
 
-  opneSnackBarError() {
-    this._snackBar.open(this.messsaje, 'X', {
+  getRole(email: string) {
+    this._userService.getRole(email).subscribe(
+      (res) => {
+        localStorage.setItem('role', res.role);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  openSnackBarError() {
+    this._snackBar.open(this.message, 'X', {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
       duration: this.durationInSeconds * 1000,
-      panelClass:['style-snackBarFalse']
+      panelClass: ['style-snackBarFalse'],
     });
   }
 }

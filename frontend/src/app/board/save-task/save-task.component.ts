@@ -14,18 +14,17 @@ import {
 })
 export class SaveTaskComponent implements OnInit {
   registerData: any;
-  message: string;
+  selectedFile: any;
+  message: string = '';
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   durationInSeconds: number = 2;
-  selectedFile: any;
 
   constructor(
     private _boardService: BoardService,
     private _router: Router,
     private _snackBar: MatSnackBar
   ) {
-    this.message = '';
     this.registerData = {};
     this.selectedFile = null;
   }
@@ -34,21 +33,18 @@ export class SaveTaskComponent implements OnInit {
 
   saveTask() {
     if (!this.registerData.name || !this.registerData.description) {
-      console.log('Failed process: Incomplete data');
-      this.message = 'Failed process: Incomplete data';
+      this.message = 'Failed process: Imcomplete data';
       this.openSnackBarError();
       this.registerData = {};
     } else {
       this._boardService.saveTask(this.registerData).subscribe(
         (res) => {
-          console.log(res);
           this._router.navigate(['/listTask']);
           this.message = 'Task create';
           this.openSnackBarSuccesfull();
           this.registerData = {};
         },
         (err) => {
-          console.log(err);
           this.message = err.error;
           this.openSnackBarError();
         }
@@ -62,26 +58,25 @@ export class SaveTaskComponent implements OnInit {
 
   saveTaskImg() {
     if (!this.registerData.name || !this.registerData.description) {
-      console.log('Failed process: Incomplete data');
-      this.message = 'Failed process: Incomplete data';
+      this.message = 'Failed process: Imcomplete data';
       this.openSnackBarError();
       this.registerData = {};
     } else {
       const data = new FormData();
-      data.append('image', this.selectedFile, this.selectedFile.name);
+      if (this.selectedFile != null) {
+        data.append('image', this.selectedFile, this.selectedFile.name);
+      }
       data.append('name', this.registerData.name);
       data.append('description', this.registerData.description);
 
       this._boardService.saveTaskImg(data).subscribe(
         (res) => {
-          console.log(res);
           this._router.navigate(['/listTask']);
           this.message = 'Task create';
           this.openSnackBarSuccesfull();
           this.registerData = {};
         },
         (err) => {
-          console.log(err);
           this.message = err.error;
           this.openSnackBarError();
         }

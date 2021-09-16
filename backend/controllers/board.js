@@ -8,20 +8,20 @@ const saveTask = async (req, res) => {
   if (!req.body.name || !req.body.description)
     return res.status(400).send("Incomplete data");
 
-  let board = new Board({
+  const board = new Board({
     userId: req.user._id,
     name: req.body.name,
     description: req.body.description,
     taskStatus: "to-do",
   });
 
-  let result = await board.save();
+  const result = await board.save();
   if (!result) return res.status(400).send("Error registering task");
   return res.status(200).send({ result });
 };
 
 const listTask = async (req, res) => {
-  let board = await Board.find({ userId: req.user._id });
+  const board = await Board.find({ userId: req.user._id });
   if (!board || board.length === 0)
     return res.status(400).send("You have no assigned tasks");
   return res.status(200).send({ board });
@@ -31,20 +31,21 @@ const saveTaskImg = async (req, res) => {
   if (!req.body.name || !req.body.description)
     return res.status(400).send("Incomplete data");
 
-  console.log(req.files); //eliminar
-  let imageUrl = ""; //http     localhost:3001/uploads/2145200.jpg
-  if (req.files !== undefined && req.files.image.type) {
-    let url = req.protocol + "://" + req.get("host") + "/";
-    let serverImg =
-      "./uploads/" + moment().unix() + path.extname(req.files.image.path);
-    fs.createReadStream(req.files.image.path).pipe(
-      fs.createWriteStream(serverImg)
-    );
-    imageUrl =
-      url + "uploads/" + moment().unix() + path.extname(req.files.image.path);
+  let imageUrl = "";
+  if (req.files.image) {
+    if (req.files.image.type != null) {
+      const url = req.protocol + "://" + req.get("host") + "/";
+      const serverImg =
+        "./uploads/" + moment().unix() + path.extname(req.files.image.path);
+      fs.createReadStream(req.files.image.path).pipe(
+        fs.createWriteStream(serverImg)
+      );
+      imageUrl =
+        url + "uploads/" + moment().unix() + path.extname(req.files.image.path);
+    }
   }
 
-  let board = new Board({
+  const board = new Board({
     userId: req.user._id,
     name: req.body.name,
     description: req.body.description,
@@ -52,7 +53,7 @@ const saveTaskImg = async (req, res) => {
     imageUrl: imageUrl,
   });
 
-  let result = await board.save();
+  const result = await board.save();
   if (!result) return res.status(400).send("Error registering task");
   return res.status(200).send({ result });
 };
@@ -64,7 +65,7 @@ const updateTask = async (req, res) => {
   if (!req.body._id || !req.body.taskStatus)
     return res.status(400).send("Incomplete data");
 
-  let board = await Board.findByIdAndUpdate(req.body._id, {
+  const board = await Board.findByIdAndUpdate(req.body._id, {
     userId: req.user._id,
     taskStatus: req.body.taskStatus,
   });
@@ -74,12 +75,23 @@ const updateTask = async (req, res) => {
 };
 
 const deleteTask = async (req, res) => {
-  let validId = mongoose.Types.ObjectId.isValid(req.params._id);
+  const validId = mongoose.Types.ObjectId.isValid(req.params._id);
   if (!validId) return res.status(400).send("Invalid id");
 
-  let board = await Board.findByIdAndDelete(req.params._id);
+  let taskImg = await Board.findById(req.params._id);
+  taskImg = taskImg.imageUrl;
+  taskImg = taskImg.split("/")[4];
+  let serverImg = "./uploads/" + taskImg;
+
+  const board = await Board.findByIdAndDelete(req.params._id);
   if (!board) return res.status(400).send("Task not found");
-  return res.status(200).send({message:"Task deleted"});
+
+  try {
+    fs.unlinkSync(serverImg);
+  } catch (err) {
+    console.log("Image no found in server");
+  }
+  return res.status(200).send({ message: "Task deleted" });
 };
 
 module.exports = { saveTask, listTask, updateTask, deleteTask, saveTaskImg };

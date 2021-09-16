@@ -17,6 +17,7 @@ export class UserService {
     return this._http.post<any>(this.env + 'user/registerUser', user);
   }
 
+
   login(user: any) {
     return this._http.post<any>(this.env + 'user/login', user);
   }
@@ -28,8 +29,38 @@ export class UserService {
   getToken() {
     return localStorage.getItem('token');
   }
+
+  isAdmin() {
+    return localStorage.getItem('role') === 'admin' ? true : false;
+  }
+
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
     this._router.navigate(['/login']);
+  }
+
+  getRole(email: string) {
+    return this._http.get<any>(this.env + 'user/getRole/' + email);
+  }
+
+  listUser(name: string) {
+    return this._http.get<any>(this.env + 'user/listUsers/' + name);
+  }
+
+  findUser(_id: string) {
+    return this._http.get<any>(this.env + 'user/findUser/' + _id);
+  }
+
+  updateUser(user: any) {
+    return this._http.put<any>(this.env + 'user/updateUser', user);
+  }
+
+  deleteUser(user: any) {
+    return this._http.put<any>(this.env + 'user/deleteUser', user);
+  }
+
+  registerAdmin(user: any) {
+    return this._http.post<any>(this.env + 'user/registerAdmin', user);
   }
 }

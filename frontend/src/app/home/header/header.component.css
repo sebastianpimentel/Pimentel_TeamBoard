@@ -7,6 +7,17 @@ a {
   color: white;
 }
 
+ul {
+  margin: auto;
+}
+
 .bgHeader {
-  background-color: #383d38;
+  background-color: #4a4b4a4f;
+}
+
+mat-form-field {
+  margin: 5px 0px;
+  font-size: 15px;
+  width: 300px;
+  padding: 6px;
 }

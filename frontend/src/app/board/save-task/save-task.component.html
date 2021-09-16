@@ -1,7 +1,7 @@
-<div class="bg-component">
+<div class="bgComponent">
   <div class="form">
     <mat-card class="card">
-      <mat-card-title> Create Task</mat-card-title>
+      <mat-card-title>Create Task</mat-card-title>
       <mat-card-content>
         <div class="container">
           <mat-form-field>
@@ -20,10 +20,13 @@
               required
             />
           </mat-form-field>
-            <input type="file" (change)="uploadImg($event)" />
+          <input type="file" (change)="uploadImg($event)" />
         </div>
       </mat-card-content>
       <mat-card-actions>
+        <!-- <button (click)="saveTask()" class="button" mat-raised-button>
+          Create
+        </button> -->
         <button (click)="saveTaskImg()" class="button" mat-raised-button>
           Create
         </button>

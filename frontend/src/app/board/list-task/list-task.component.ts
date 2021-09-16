@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../../services/board.service';
-import { Router } from '@angular/router';
 import {
   MatSnackBar,
   MatSnackBarHorizontalPosition,
@@ -14,33 +13,30 @@ import {
 })
 export class ListTaskComponent implements OnInit {
   taskData: any;
-  message: string;
+  message: string = '';
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   durationInSeconds: number = 2;
 
   constructor(
     private _boardService: BoardService,
-    private _router: Router,
     private _snackBar: MatSnackBar
   ) {
-    this.message = '';
     this.taskData = {};
   }
 
   ngOnInit(): void {
     this._boardService.listTask().subscribe(
       (res) => {
-        console.log(res);
         this.taskData = res.board;
       },
       (err) => {
-        console.log(err);
         this.message = err.error;
         this.openSnackBarError();
       }
     );
   }
+
   updateTask(task: any, status: string) {
     let tempStatus = task.taskStatus;
     task.taskStatus = status;

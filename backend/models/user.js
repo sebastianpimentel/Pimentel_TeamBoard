@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
   dbStatus: Boolean,
 });
+
 userSchema.methods.generateJWT = function () {
   return jwt.sign(
     {
@@ -21,5 +22,6 @@ userSchema.methods.generateJWT = function () {
     process.env.SECRET_KEY_JWT
   );
 };
+
 const user = mongoose.model("user", userSchema);
 module.exports = user;

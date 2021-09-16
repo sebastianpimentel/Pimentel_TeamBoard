@@ -16,7 +16,7 @@ app.use("/api/board", Board);
 app.use("/uploads", express.static("uploads"));
 
 app.listen(process.env.PORT, () =>
-  console.log("Backend server running on port : " + process.env.PORT)
+  console.log("Backend server running on port: " + process.env.PORT)
 );
 
 dbConnection();

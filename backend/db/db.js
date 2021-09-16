@@ -10,7 +10,8 @@ const dbConnection = async () => {
     });
     console.log("Connection with MongoDB: ON");
   } catch (e) {
-    console.log("Error Connecting to MongoBD: check out ", e);
+    console.log("Error connecting to MongoDB: ", e);
   }
 };
+
 module.exports = { dbConnection };

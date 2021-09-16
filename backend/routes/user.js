@@ -8,11 +8,18 @@ const Admin = require("../middleware/admin");
 router.post("/registerUser", UserController.registerUser);
 router.post("/login", UserController.login);
 router.get(
-  "/listUser/:name?",
+  "/listUsers/:name?",
   Auth,
   ValidateUser,
   Admin,
   UserController.listUser
+);
+router.get(
+  "/listUsers/:name?",
+  Auth,
+  ValidateUser,
+  Admin,
+  UserController.listUserAll
 );
 router.put("/updateUser", Auth, ValidateUser, Admin, UserController.updateUser);
 router.put("/deleteUser", Auth, ValidateUser, Admin, UserController.deleteUser);
@@ -22,6 +29,14 @@ router.post(
   ValidateUser,
   Admin,
   UserController.registerAdmin
+);
+router.get("/getRole/:email", Auth, ValidateUser, UserController.getRole);
+router.get(
+  "/findUser/:_id",
+  Auth,
+  ValidateUser,
+  Admin,
+  UserController.findUser
 );
 
 module.exports = router;

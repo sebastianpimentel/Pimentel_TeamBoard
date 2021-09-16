@@ -8,14 +8,6 @@ const multiparty = require("connect-multiparty");
 const mult = multiparty();
 
 router.post("/saveTask", Auth, ValidateUser, BoardController.saveTask);
-router.get("/listTask", Auth, ValidateUser, BoardController.listTask);
-router.put("/updateTask", Auth, ValidateUser, BoardController.updateTask);
-router.delete(
-  "/deleteTask/:_id",
-  Auth,
-  ValidateUser,
-  BoardController.deleteTask
-);
 router.post(
   "/saveTaskImg",
   mult,
@@ -24,5 +16,13 @@ router.post(
   ValidateUser,
   BoardController.saveTaskImg
 );
+router.get("/listTask", Auth, ValidateUser, BoardController.listTask);
+router.put("/updateTask", Auth, ValidateUser, BoardController.updateTask);
+router.delete(
+  "/deleteTask/:_id",
+  Auth,
+  ValidateUser,
+  BoardController.deleteTask
+);
 
-module.exports=router;
+module.exports = router;

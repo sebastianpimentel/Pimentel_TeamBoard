@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ListRoleComponent } from './admin/list-role/list-role.component';
 import { ListUserComponent } from './admin/list-user/list-user.component';
@@ -10,7 +10,9 @@ import { ListTaskComponent } from './board/list-task/list-task.component';
 import { SaveTaskComponent } from './board/save-task/save-task.component';
 import { LoginComponent } from './home/login/login.component';
 import { RegisterComponent } from './home/register/register.component';
-import { AuthGuard } from "./guard/auth.guard";
+
+import { AuthGuard } from './guard/auth.guard';
+
 const routes: Routes = [
   {
     path: '',
@@ -20,13 +22,12 @@ const routes: Routes = [
   {
     path: 'listTask',
     component: ListTaskComponent,
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
-    path:'saveTask',
-    component:SaveTaskComponent,
-    canActivate:[AuthGuard]
-
+    path: 'saveTask',
+    component: SaveTaskComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'login',
@@ -39,35 +40,33 @@ const routes: Routes = [
   {
     path: 'listUser',
     component: ListUserComponent,
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'registerUser',
     component: RegisterUserComponent,
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
-    path: 'updateUser',
+    path: 'updateUser/:_id',
     component: UpdateUserComponent,
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'registerRole',
     component: RegisterRoleComponent,
-    canActivate:[AuthGuard]
-
+    canActivate: [AuthGuard],
   },
   {
     path: 'listRole',
     component: ListRoleComponent,
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
-    path: 'updateRole',
+    path: 'updateRole/:_id',
     component: UpdateRoleComponent,
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard],
   },
-
 ];
 
 @NgModule({
